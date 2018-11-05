@@ -1,4 +1,4 @@
-package com.fabercode;
+package com.fabercode.prelude;
 
 public class Main {
 
