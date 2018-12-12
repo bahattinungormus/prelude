@@ -1,4 +1,4 @@
-package com.fabercode.prelude;
+package com.fabercode.prelude.core;
 
 public class Invariant<V> {
     public final V value;
@@ -7,7 +7,11 @@ public class Invariant<V> {
         this.value = value;
     }
 
-    public V get() {
+    public final V value() {
         return value;
+    }
+
+    public final boolean isEmpty() {
+        return value == null;
     }
 }
