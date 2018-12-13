@@ -1,6 +1,7 @@
 package com.fabercode.prelude.core;
 
-import java.util.concurrent.Callable;
+import com.fabercode.prelude.core.functionals.Retrievable;
+
 import java.util.function.Supplier;
 
 public class Result<R> extends Invariant<R> {
@@ -12,11 +13,11 @@ public class Result<R> extends Invariant<R> {
     }
 
     @SafeVarargs
-    static <R> Result<R> of(Callable<R>... calls) {
+    static <R> Result<R> of(Retrievable<R>... calls) {
         for (int i = 0; i < calls.length; i++) {
             try {
                 R result;
-                if ((result = calls[i].call()) != null) return new Result<>(result, null);
+                if ((result = calls[i].retrieve()) != null) return new Result<>(result, null);
             } catch (Throwable cause) {
                 if (i == calls.length - 1) return new Result<>(null, cause);
             }
@@ -26,7 +27,7 @@ public class Result<R> extends Invariant<R> {
 
 
     @SafeVarargs
-    public static <R> Supplier<Result<R>> defer(Callable<R>... callChain) {
+    public static <R> Supplier<Result<R>> defer(Retrievable<R>... callChain) {
         return () -> Result.of(callChain);
     }
 }
