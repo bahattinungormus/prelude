@@ -1,6 +1,6 @@
 package com.fabercode.prelude.core;
 
-import com.fabercode.prelude.core.functionals.Retrievable;
+import com.fabercode.prelude.core.functionals.InvocationHandle;
 
 import java.util.function.Supplier;
 
@@ -13,11 +13,11 @@ public class Result<R> extends Invariant<R> {
     }
 
     @SafeVarargs
-    static <R> Result<R> of(Retrievable<R>... calls) {
+    static <R> Result<R> of(InvocationHandle<R>... calls) {
         for (int i = 0; i < calls.length; i++) {
             try {
                 R result;
-                if ((result = calls[i].retrieve()) != null) return new Result<>(result, null);
+                if ((result = calls[i].invoke()) != null) return new Result<>(result, null);
             } catch (Throwable cause) {
                 if (i == calls.length - 1) return new Result<>(null, cause);
             }
@@ -27,7 +27,7 @@ public class Result<R> extends Invariant<R> {
 
 
     @SafeVarargs
-    public static <R> Supplier<Result<R>> defer(Retrievable<R>... callChain) {
+    public static <R> Supplier<Result<R>> defer(InvocationHandle<R>... callChain) {
         return () -> Result.of(callChain);
     }
 }
