@@ -1,8 +1,10 @@
 package com.fabercode.prelude.core;
 
-import com.fabercode.prelude.core.functionals.InvocationHandle;
+import com.fabercode.prelude.core.functionals.UncheckedExpression;
 
+import java.util.Iterator;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 public class Result<R> extends Invariant<R> {
     public final Throwable error;
@@ -13,13 +15,14 @@ public class Result<R> extends Invariant<R> {
     }
 
     @SafeVarargs
-    static <R> Result<R> of(InvocationHandle<R>... calls) {
-        for (int i = 0; i < calls.length; i++) {
+    public static <R> Result<R> of(UncheckedExpression<R>... expressions) {
+        Iterator<UncheckedExpression<R>> iterator = Stream.of(expressions).iterator();
+        while (iterator.hasNext()) {
             try {
-                R result;
-                if ((result = calls[i].invoke()) != null) return new Result<>(result, null);
+                R result = iterator.next().evaluate();
+                if (result != null) return new Result<>(result, null);
             } catch (Throwable cause) {
-                if (i == calls.length - 1) return new Result<>(null, cause);
+                if (!iterator.hasNext()) return new Result<>(null, cause);
             }
         }
         return new Result<>(null, null);
@@ -27,7 +30,7 @@ public class Result<R> extends Invariant<R> {
 
 
     @SafeVarargs
-    public static <R> Supplier<Result<R>> defer(InvocationHandle<R>... callChain) {
-        return () -> Result.of(callChain);
+    public static <R> Supplier<Result<R>> defer(UncheckedExpression<R>... expressions) {
+        return () -> Result.of(expressions);
     }
 }

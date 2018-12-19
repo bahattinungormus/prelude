@@ -1,6 +1,6 @@
 package com.fabercode.prelude.core.functionals;
 
 @FunctionalInterface
-public interface ActionHandle {
+public interface UncheckedAction {
     void perform();
 }
