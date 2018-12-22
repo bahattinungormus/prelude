@@ -14,6 +14,18 @@ public class Result<R> extends Invariant<R> {
         this.error = error;
     }
 
+    public static <R> Result<R> empty() {
+        return new Result<>(null, null);
+    }
+
+    public static <R> Result<R> error(Throwable cause) {
+        return new Result<>(null, cause);
+    }
+
+    public static <R> Result<R> value(R value) {
+        return new Result<>(value, null);
+    }
+
     @SafeVarargs
     public static <R> Result<R> of(UncheckedExpression<R>... expressions) {
         Iterator<UncheckedExpression<R>> iterator = Stream.of(expressions).iterator();
@@ -25,7 +37,7 @@ public class Result<R> extends Invariant<R> {
                 if (!iterator.hasNext()) return new Result<>(null, cause);
             }
         }
-        return new Result<>(null, null);
+        return Caller.resultOf(expressions);
     }
 
 
