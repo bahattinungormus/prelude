@@ -1,6 +1,6 @@
 package com.fabercode.prelude.core.functionals;
 
 @FunctionalInterface
-public interface UncheckedProcedure<P> {
-    void call(P parameter);
+public interface Actor {
+    void perform() throws Throwable;
 }

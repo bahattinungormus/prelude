@@ -1,6 +1,6 @@
 package com.fabercode.prelude.core.functionals;
 
 @FunctionalInterface
-public interface UncheckedAction {
-    void perform();
+public interface Generator<R> {
+    R generate() throws Throwable;
 }

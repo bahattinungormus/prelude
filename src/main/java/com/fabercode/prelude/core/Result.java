@@ -1,6 +1,6 @@
 package com.fabercode.prelude.core;
 
-import com.fabercode.prelude.core.functionals.UncheckedExpression;
+import com.fabercode.prelude.core.functionals.Generator;
 
 import java.util.Iterator;
 import java.util.function.Supplier;
@@ -27,11 +27,11 @@ public class Result<R> extends Invariant<R> {
     }
 
     @SafeVarargs
-    public static <R> Result<R> of(UncheckedExpression<R>... expressions) {
-        Iterator<UncheckedExpression<R>> iterator = Stream.of(expressions).iterator();
+    public static <R> Result<R> of(Generator<R>... expressions) {
+        Iterator<Generator<R>> iterator = Stream.of(expressions).iterator();
         while (iterator.hasNext()) {
             try {
-                R result = iterator.next().evaluate();
+                R result = iterator.next().generate();
                 if (result != null) return new Result<>(result, null);
             } catch (Throwable cause) {
                 if (!iterator.hasNext()) return new Result<>(null, cause);
@@ -42,7 +42,7 @@ public class Result<R> extends Invariant<R> {
 
 
     @SafeVarargs
-    public static <R> Supplier<Result<R>> defer(UncheckedExpression<R>... expressions) {
+    public static <R> Supplier<Result<R>> defer(Generator<R>... expressions) {
         return () -> Result.of(expressions);
     }
 }
