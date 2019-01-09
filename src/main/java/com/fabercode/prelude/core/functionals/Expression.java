@@ -1,6 +1,6 @@
 package com.fabercode.prelude.core.functionals;
 
 @FunctionalInterface
-public interface Actor {
-    void perform() throws Throwable;
+public interface Expression<R> {
+    R evaluate() throws Throwable;
 }
