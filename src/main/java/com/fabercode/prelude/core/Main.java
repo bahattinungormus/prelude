@@ -1,5 +1,7 @@
 package com.fabercode.prelude.core;
 
+import com.fabercode.prelude.core.functionals.Result;
+
 public class Main {
 
     public static void main(String[] args) {

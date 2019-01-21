@@ -1,6 +1,6 @@
 package com.fabercode.prelude.core.functionals;
 
 @FunctionalInterface
-public interface Procedure {
-    void call() throws Throwable;
+public interface Action {
+    void perform() throws Throwable;
 }

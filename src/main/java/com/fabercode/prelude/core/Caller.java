@@ -1,6 +1,7 @@
 package com.fabercode.prelude.core;
 
 import com.fabercode.prelude.core.functionals.Expression;
+import com.fabercode.prelude.core.functionals.Result;
 
 import java.util.Iterator;
 import java.util.stream.Stream;

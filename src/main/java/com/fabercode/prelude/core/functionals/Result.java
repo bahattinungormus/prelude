@@ -1,6 +1,7 @@
-package com.fabercode.prelude.core;
+package com.fabercode.prelude.core.functionals;
 
-import com.fabercode.prelude.core.functionals.Expression;
+import com.fabercode.prelude.core.Caller;
+import com.fabercode.prelude.core.Invariant;
 
 import java.util.Iterator;
 import java.util.function.Supplier;
