@@ -28,11 +28,11 @@ public class Result<R> extends Invariant<R> {
     }
 
     @SafeVarargs
-    public static <R> Result<R> of(Expression<R>... expressions) {
-        Iterator<Expression<R>> iterator = Stream.of(expressions).iterator();
+    public static <R> Result<R> of(FreeFunctional<R>... expressions) {
+        Iterator<FreeFunctional<R>> iterator = Stream.of(expressions).iterator();
         while (iterator.hasNext()) {
             try {
-                R result = iterator.next().evaluate();
+                R result = iterator.next().apply();
                 if (result != null) return new Result<>(result, null);
             } catch (Throwable cause) {
                 if (!iterator.hasNext()) return new Result<>(null, cause);
@@ -43,7 +43,7 @@ public class Result<R> extends Invariant<R> {
 
 
     @SafeVarargs
-    public static <R> Supplier<Result<R>> defer(Expression<R>... expressions) {
+    public static <R> Supplier<Result<R>> defer(FreeFunctional<R>... expressions) {
         return () -> Result.of(expressions);
     }
 }

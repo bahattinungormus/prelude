@@ -4,10 +4,26 @@ import java.util.Iterator;
 import java.util.stream.Stream;
 
 public interface Unchecked {
-    public static <R> Result<R> resultOf(Iterator<Expression<R>> fallbacks) {
+
+    static <P, R> Functional<P, R> or(Functional<P, R>... functionals) {
+        return param -> {
+            R result;
+            Throwable cause = null;
+            for (Functional<P, R> functional : functionals) {
+                try {
+                    if ((result = functional.apply(param)) != null) return result;
+                } catch (Throwable fault) {
+                    cause = fault;
+                }
+            }
+            throw new RuntimeException(cause);
+        };
+    }
+
+    public static <R> Result<R> resultOf(Iterator<FreeFunctional<R>> fallbacks) {
         R result;
         try {
-            if (fallbacks.hasNext() && (result = fallbacks.next().evaluate()) != null) return Result.value(result);
+            if (fallbacks.hasNext() && (result = fallbacks.next().apply()) != null) return Result.value(result);
             else if (fallbacks.hasNext()) return resultOf(fallbacks);
             else return Result.empty();
         } catch (Throwable cause) {
@@ -15,7 +31,7 @@ public interface Unchecked {
         }
     }
 
-    public static <R> Result<R> resultOf(Expression<R>... expressions) {
+    public static <R> Result<R> resultOf(FreeFunctional<R>... expressions) {
         return resultOf(Stream.of(expressions).iterator());
     }
 
