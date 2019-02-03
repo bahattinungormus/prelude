@@ -5,13 +5,13 @@ import java.util.stream.Stream;
 
 public interface Unchecked {
 
-    static <P, R> Functional<P, R> or(Functional<P, R>... functionals) {
+    static <P, R> Mapper<P, R> or(Mapper<P, R>... functions) {
         return param -> {
             R result;
             Throwable cause = null;
-            for (Functional<P, R> functional : functionals) {
+            for (Mapper<P, R> function : functions) {
                 try {
-                    if ((result = functional.apply(param)) != null) return result;
+                    if ((result = function.apply(param)) != null) return result;
                 } catch (Throwable fault) {
                     cause = fault;
                 }
@@ -20,7 +20,7 @@ public interface Unchecked {
         };
     }
 
-    public static <R> Result<R> resultOf(Iterator<FreeFunctional<R>> fallbacks) {
+    public static <R> Result<R> resultOf(Iterator<Reactor<R>> fallbacks) {
         R result;
         try {
             if (fallbacks.hasNext() && (result = fallbacks.next().apply()) != null) return Result.value(result);
@@ -31,7 +31,7 @@ public interface Unchecked {
         }
     }
 
-    public static <R> Result<R> resultOf(FreeFunctional<R>... expressions) {
+    public static <R> Result<R> resultOf(Reactor<R>... expressions) {
         return resultOf(Stream.of(expressions).iterator());
     }
 

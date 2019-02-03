@@ -1,7 +1,7 @@
 package com.fabercode.prelude.core.functionals;
 
 @FunctionalInterface
-public interface FreeProcedural extends Procedural<Void> {
+public interface Actor extends Handler<Void> {
     void call() throws Throwable;
 
     @Override

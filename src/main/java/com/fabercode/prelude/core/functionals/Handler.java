@@ -1,7 +1,7 @@
 package com.fabercode.prelude.core.functionals;
 
 @FunctionalInterface
-public interface Procedural<P> extends Functional<P, Void> {
+public interface Handler<P> extends Mapper<P, Void> {
     void call(P parameter) throws Throwable;
 
     @Override

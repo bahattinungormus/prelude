@@ -1,7 +1,7 @@
 package com.fabercode.prelude.core.functionals;
 
 @FunctionalInterface
-public interface FreeFunctional<R> extends Functional<Void, R> {
+public interface Reactor<R> extends Mapper<Void, R> {
     R apply() throws Throwable;
 
     @Override

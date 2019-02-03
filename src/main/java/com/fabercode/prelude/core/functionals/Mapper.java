@@ -1,6 +1,6 @@
 package com.fabercode.prelude.core.functionals;
 
 @FunctionalInterface
-public interface Functional<P, R> {
+public interface Mapper<P, R> {
     R apply(P parameter) throws Throwable;
 }
