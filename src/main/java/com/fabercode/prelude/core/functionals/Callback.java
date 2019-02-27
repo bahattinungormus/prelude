@@ -1,7 +1,7 @@
 package com.fabercode.prelude.core.functionals;
 
 @FunctionalInterface
-public interface FunctionalConsumer<P> extends Functional<P, Void> {
+public interface Callback<P> extends FunctionDefinition<P, Void> {
     void accept(P parameter) throws Throwable;
 
     @Override

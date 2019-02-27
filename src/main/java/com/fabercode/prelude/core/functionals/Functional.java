@@ -1,10 +1,8 @@
 package com.fabercode.prelude.core.functionals;
 
-import java.util.function.Function;
-import java.util.stream.Stream;
+import java.util.Iterator;
 
-@FunctionalInterface
-public interface Functional<P, R> extends Function<P, R> {
+public interface Functional<P, R> {
     R call(P parameter) throws Throwable;
 
     default Result<R> getResult(P parameter) {
@@ -15,34 +13,16 @@ public interface Functional<P, R> extends Function<P, R> {
         }
     }
 
-    default R apply(P parameter, Function<Throwable, R> exceptionHandler, Function<P, R> nullHandler) {
-        return getResult(parameter).yield(exceptionHandler, () -> nullHandler.apply(parameter));
-    }
-
-    default R apply(P parameter, Function<Throwable, R> exceptionHandler) {
-        return apply(parameter, exceptionHandler, p -> null);
-    }
-
-    @Override
-    default R apply(P parameter) {
-        return apply(parameter, fault -> {
-            throw new RuntimeException(fault);
-        });
-    }
-
-    default Functional<P, R> or(Functional<P, R> fallback) {
-        return parameter -> apply(parameter, fault -> fallback.apply(parameter), fallback);
-    }
-
-    static <P, R> Functional<P, R> reduce(Functional<P, R>... functionals) {
-        return Stream.of(functionals).reduce(Functional::or).orElse(p -> null);
-    }
-
-    default <T> Functional<P, T> then(Functional<R, T> antecedent) {
-        return parameter -> antecedent.apply(apply(parameter));
-    }
-
-    default <E> Functional<E, R> before(Functional<E, P> precedent) {
-        return parameter -> apply(precedent.apply(parameter));
+    static <P, R> R any(P parameter, Iterator<Functional<P, R>> functionals) {
+        if (functionals == null) throw new IllegalArgumentException();
+        while (functionals.hasNext()) {
+            try {
+                R result;
+                if ((result = functionals.next().call(parameter)) != null) return result;
+            } catch (Throwable fault) {
+                if (!functionals.hasNext()) throw new RuntimeException(fault);
+            }
+        }
+        return null;
     }
 }

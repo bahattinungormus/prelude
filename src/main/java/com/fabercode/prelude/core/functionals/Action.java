@@ -1,7 +1,7 @@
 package com.fabercode.prelude.core.functionals;
 
 @FunctionalInterface
-public interface FunctionalRunnable extends Functional<Void, Void> {
+public interface Action extends FunctionDefinition<Void, Void> {
     void run() throws Throwable;
 
     @Override
