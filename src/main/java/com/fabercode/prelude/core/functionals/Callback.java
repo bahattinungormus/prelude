@@ -1,7 +1,7 @@
 package com.fabercode.prelude.core.functionals;
 
 @FunctionalInterface
-public interface Callback<P> extends FunctionDefinition<P, Void> {
+public interface Callback<P> extends Operation<P, Void> {
     void accept(P parameter) throws Throwable;
 
     @Override

@@ -1,7 +1,7 @@
 package com.fabercode.prelude.core.functionals;
 
 @FunctionalInterface
-public interface Feedback<R> extends FunctionDefinition<Void, R> {
+public interface Feedback<R> extends Operation<Void, R> {
     R get() throws Throwable;
 
     @Override
