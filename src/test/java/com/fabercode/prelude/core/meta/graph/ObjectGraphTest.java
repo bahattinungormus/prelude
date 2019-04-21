@@ -1,10 +1,11 @@
-package com.fabercode.prelude.core.meta;
+package com.fabercode.prelude.core.meta.graph;
 
+import com.fabercode.prelude.core.meta.ObjectGraph;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-public class FieldGraphTest {
+public class ObjectGraphTest {
 
     @BeforeMethod
     public void setUp() {
@@ -16,9 +17,7 @@ public class FieldGraphTest {
 
     @Test
     public void testGenerify() {
-        String source = "bahattin";
-        FieldGraph fieldGraph = new FieldGraph(source);
-        fieldGraph.generify();
-        System.out.println(fieldGraph);
+        ObjectGraph objectGraph = new ObjectGraph(new ObjectGraph("bahattin"));
+        System.out.println(objectGraph);
     }
 }
