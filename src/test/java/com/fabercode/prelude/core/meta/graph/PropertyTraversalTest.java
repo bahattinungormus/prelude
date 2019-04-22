@@ -1,11 +1,11 @@
 package com.fabercode.prelude.core.meta.graph;
 
-import com.fabercode.prelude.core.meta.ObjectGraph;
+import com.fabercode.prelude.core.meta.PropertyTraversal;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-public class ObjectGraphTest {
+public class PropertyTraversalTest {
 
     @BeforeMethod
     public void setUp() {
@@ -17,7 +17,7 @@ public class ObjectGraphTest {
 
     @Test
     public void testGenerify() {
-        ObjectGraph objectGraph = new ObjectGraph(new ObjectGraph("bahattin"));
-        System.out.println(objectGraph);
+        PropertyTraversal propertyTraversal = new PropertyTraversal(new PropertyTraversal("bahattin"));
+        System.out.println(propertyTraversal);
     }
 }

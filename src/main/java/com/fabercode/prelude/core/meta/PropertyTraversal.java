@@ -3,30 +3,22 @@ package com.fabercode.prelude.core.meta;
 import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-public class ObjectGraph {
-    private final Object root;
-    private final String name;
-    private final HashSet<Object> objects;
-    private final HashMap<String, Object> componentMap;
+public class PropertyTraversal extends Traversal {
 
-    public ObjectGraph(Object root) {
-        this.root = root;
-        this.name = root.getClass().getSimpleName();
-        this.objects = new HashSet<>();
-        this.componentMap = new HashMap<>();
-        collect(name, root);
+    public PropertyTraversal(Object root) {
+        super(root, PropertyTraversal::flatmap);
     }
 
-    public void collect(String name, Object source) {
-        if (source == null || !objects.add(source)) return;
-        componentMap.put(name, source);
-        if (!isComposite(source)) return;
-        Reflector.propertyMap(source).forEach((key, s) -> decompose(name + "." + key, s).forEach(this::collect));
+    public static HashMap<String, Object> flatmap(String name, Object source) {
+        HashMap<String, Object> map = new HashMap<>();
+        if (isComposite(source))
+            Reflector.propertyMap(source, m -> !m.getDeclaringClass().equals(Object.class))
+                    .forEach((key, s) -> map.putAll(decompose(name + "." + key, s)));
+        return map;
     }
 
     private static HashMap<String, ?> decompose(String name, Object source) {
